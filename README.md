@@ -11,6 +11,10 @@ in a `client.chat.completions.create` call. It gathers the data by introspection
 - **Type Mapping**: Maps Python data types to a predefined set of string representations.
 - **Strict Mode**: Enforces strict requirements for docstrings and type annotations.
 
+## Requirements
+
+This package requires `typing.Annotated` to be available, so Python 3.9.0 and higher is required. 
+
 ## Installation
 
 You can install ToolDefGenerator by cloning the repository and installing it via pip:
@@ -20,7 +24,8 @@ git clone https://github.com/yourrepository/ToolDefGenerator.git
 cd ToolDefGenerator
 pip install .
 ```
-If working on the package it is useful to install it in editable form:
+
+When working on the package it is useful to install it in editable form:
 ```bash
 pip install -r requirements.txt
 pip install -e .
@@ -34,6 +39,7 @@ To use ToolDefGenerator, you simply need to import the package and pass the func
 
 ```python
 from ToolDefGenerator import gen_tools_desc
+from typing import Annotated
 
 def example_function(param1: Annotated[str, "The first parameter"], param2: Annotated[str, "The second parameter"]) -> str:
     """
@@ -83,6 +89,10 @@ Introspects a function to get its name, description, and parameters.
 #### Returns
 
 - A dictionary containing the function's name, description, and parameters.
+
+## TODO
+ 
+- use `typing-extensions` package to get access to `typing.Annotated` in older versions of Python
 
 ## Contributing
 
