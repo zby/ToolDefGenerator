@@ -31,6 +31,11 @@ pip install -r requirements.txt
 pip install -e .
 ```
 
+And test:
+```bash
+pytest -v tests
+```
+
 ## Usage
 
 To use ToolDefGenerator, you simply need to import the package and pass the functions you want to introspect to the `gen_tools_desc` function.
