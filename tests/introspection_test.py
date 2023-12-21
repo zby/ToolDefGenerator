@@ -111,7 +111,7 @@ def test_introspect_nostrict():
     }
 
 
-class TestClass:
+class TClass:
     def __init__(self):
         pass
 
@@ -130,8 +130,8 @@ class TestClass:
 
 def test_introspect_methods():
 
-    test_object = TestClass()
-    generator = ToolDefGenerator(ignore_first_param=True)
+    test_object = TClass()
+    generator = ToolDefGenerator()
     result = generator.introspect(test_object.some_method)
     assert result['parameters']['properties']['param1']['description'] == 'The first parameter'
     assert result['parameters']['properties']['param2']['description'] == 'The second parameter'

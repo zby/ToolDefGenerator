@@ -32,7 +32,7 @@ pip install -r requirements.txt
 pip install -e .
 ```
 
-And test:
+Then test:
 ```bash
 pytest -v tests
 ```
