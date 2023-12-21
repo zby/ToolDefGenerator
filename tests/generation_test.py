@@ -41,9 +41,9 @@ def test_generate_with_name_mapping():
     assert len(tools_desc) == 3
 
     # Assert the names are as expected, especially the custom mapped one
-    assert tools_desc[0]["name"] == "func1"
-    assert tools_desc[1]["name"] == "custom_func2"  # Custom name for func2
-    assert tools_desc[2]["name"] == "func3"
+    assert tools_desc[0]["function"]["name"] == "func1"
+    assert tools_desc[1]["function"]["name"] == "custom_func2"  # Custom name for func2
+    assert tools_desc[2]["function"]["name"] == "func3"
 
     # Additional assertions can be added to check the structure and content of the descriptions
 

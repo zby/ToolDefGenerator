@@ -1,4 +1,6 @@
 import pytest
+import inspect
+
 from typing import Annotated, get_type_hints, get_args
 from tool_def_generator import ToolDefGenerator
 
@@ -107,3 +109,32 @@ def test_introspect_nostrict():
         'param1': {'type': 'string', 'description': ''},
         'param2': {'type': 'string', 'description': ''},
     }
+
+
+class TestClass:
+    def __init__(self):
+        pass
+
+    def some_method(self, param1: Annotated[str, "The first parameter"],
+                    param2: Annotated[str, "The second parameter"]):
+        """
+        This method does something.
+        """
+        pass
+
+    def no_args_method(self):
+        """
+        This method does something.
+        """
+        pass
+
+def test_introspect_methods():
+
+    test_object = TestClass()
+    generator = ToolDefGenerator(ignore_first_param=True)
+    result = generator.introspect(test_object.some_method)
+    assert result['parameters']['properties']['param1']['description'] == 'The first parameter'
+    assert result['parameters']['properties']['param2']['description'] == 'The second parameter'
+    result = generator.introspect(test_object.no_args_method)
+    assert result['description'] == "This method does something."
+    assert result['parameters']['properties'] == {}
