@@ -9,6 +9,7 @@ in a `client.chat.completions.create` call. It gathers the data by introspection
 
 - **Automatic Tool Description**: Generates tool descriptions from Python function definitions
 - **Type Mapping**: Maps Python data types to a predefined set of string representations.
+- **Function Name Mapping**: Maps function names.
 - **Strict Mode**: Enforces strict requirements for docstrings and type annotations.
 
 ## Requirements
@@ -38,62 +39,78 @@ pytest -v tests
 
 ## Usage
 
-To use ToolDefGenerator, you simply need to import the package and pass the functions you want to introspect to the `gen_tools_desc` function.
+To use ToolDefGenerator, you need to instantiate it and pass it the functions you want to introspect
+to the `generate` method.
 
 ### Example
 
 ```python
-from ToolDefGenerator import gen_tools_desc
+from tool_def_generator import ToolDefGenerator
 from typing import Annotated
 
-def example_function(param1: Annotated[str, "The first parameter"], param2: Annotated[str, "The second parameter"]) -> str:
+
+# Define the functions
+def example_function(param1: Annotated[str, "The first parameter"],
+                     param2: Annotated[str, "The second parameter"]) -> str:
     """
     This is an example function.
     """
     pass
 
-def example_function2(param1: Annotated[str, "The first parameter"], param2: Annotated[str, "The second parameter"]) -> str:
+
+def example_function2(param1: Annotated[str, "The first parameter"],
+                      param2: Annotated[str, "The second parameter"]) -> str:
     """
-    This is an example function.
+    This is another example function.
     """
     pass
 
-tools = gen_tools_desc(example_function, example_function2)
 
+# Create an instance of ToolDefGenerator
+generator = ToolDefGenerator()
+
+# Generate tool descriptions using the new generate method
+tools = generator.generate(example_function, example_function2)
+
+# Use the generated tools in your client.chat.completions.create call
 response = client.chat.completions.create(
-        model="gpt-3.5-turbo-1106",
-        messages=messages,
-        tools=tools,
-        tool_choice="auto",  # auto is default, but we'll be explicit
-    )
+    model="gpt-3.5-turbo-1106",
+    messages=messages,
+    tools=tools,
+    tool_choice="auto",
+)
+
 ```
+For more examples see tests.
 
 ## API Reference
 
-### `gen_tools_desc(*functions: Callable) -> list`
+### Class `ToolDefGenerator`
 
-Generates a tools description array for multiple functions.
+A class for generating descriptions of Python functions.
 
-#### Arguments
+#### `__init__(self, type_map=None, strict=True, name_mappings: List[Tuple[str, str]] = None)`
 
-- `*functions`: A variable number of functions to introspect.
+Initializes the ToolDefGenerator.
 
-#### Returns
+- `type_map`: Maps Python types to strings (default provided).
+- `strict`: Enforces strict checking for annotations and docstrings.
+- `name_mappings`: List of tuples for custom name mappings of functions.
 
-- A list representing the tools structure.
+#### `generate(self, *functions: Callable) -> list`
 
-### `introspect(function: Callable, strict=True)`
+Generates a description array for given functions.
 
-Introspects a function to get its name, description, and parameters.
+- `*functions`: Functions to introspect.
+- Returns: List of tool descriptions for each function.
 
-#### Arguments
+### Internal Method `introspect(self, function: Callable)`
+
+Introspects a given function (used internally).
 
 - `function`: The function to introspect.
-- `strict`: Whether to enforce strict mode.
+- Returns: Dictionary with the function's name, description, and parameters.
 
-#### Returns
-
-- A dictionary containing the function's name, description, and parameters.
 
 ## TODO
  
