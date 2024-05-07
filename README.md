@@ -1,3 +1,5 @@
+https://github.com/zby/LLMEasyTools is much more complete than this project now.
+
 
 # ToolDefGenerator
 
